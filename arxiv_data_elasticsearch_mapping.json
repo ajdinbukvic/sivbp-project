@@ -1,0 +1,56 @@
+{
+  "documents": {
+    "mappings": {
+      "properties": {
+        "abstract": { "type": "text", "analyzer": "english" },
+        "authors": { "type": "text" },
+        "authors_parsed": {
+          "type": "nested",
+          "properties": {
+            "affiliation": { "type": "text" },
+            "name": { "type": "text" },
+            "surname": { "type": "text" }
+          }
+        },
+        "categories": { "type": "keyword" },
+        "comments": { "type": "text", "index": false },
+        "content": {
+          "type": "text",
+          "fields": {
+            "case_sensitive": {
+              "type": "text",
+              "analyzer": "case_sensitive_analyzer"
+            }
+          },
+          "analyzer": "standard"
+        },
+        "doi": { "type": "keyword", "index": false },
+        "id": { "type": "keyword" },
+        "journal-ref": { "type": "text", "index": false },
+        "journal_ref": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+        },
+        "license": { "type": "keyword" },
+        "report-no": { "type": "keyword" },
+        "report_no": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+        },
+        "submitter": { "type": "text" },
+        "title": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+        },
+        "update_date": { "type": "date" },
+        "versions": {
+          "type": "nested",
+          "properties": {
+            "created": { "type": "date" },
+            "version": { "type": "keyword" }
+          }
+        }
+      }
+    }
+  }
+}
