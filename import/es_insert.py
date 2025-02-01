@@ -4,12 +4,12 @@ from generate_data import generate_fake_documents
 from es_mapping import create_index
 from es_connection import es
 
-def insert_data(index_name, docs, bulk_size=5000):
+def insert_data(index_name, docs, bulk_size=1000):
     total_success = 0
     total_failed = 0
-
-    start_time = time.time()
     batch = []
+
+    start_time = time.perf_counter()
 
     for doc in docs:
         batch.append({"_op_type": "index", "_index": index_name, "_source": doc})
@@ -24,7 +24,8 @@ def insert_data(index_name, docs, bulk_size=5000):
         total_success += success
         total_failed += failed
 
-    end_time = time.time()
+    es.indices.refresh(index=index_name)
+    end_time = time.perf_counter() 
     print(f"Inserted {total_success} documents in {end_time - start_time:.2f} seconds. Failed: {total_failed}")
     
 def bulk_insert(actions):
@@ -37,11 +38,13 @@ def bulk_insert(actions):
         failed = len(actions)
 
     return success, failed
-    
-# for num_shards in [1, 2, 3]:
-#     index_name = f"new_documents_{num_shards}_shards"
-#     create_index(index_name, num_shards)
 
-#     for size in [50_000, 100_000, 150_000, 200_000, 250_000]:
-#         docs = generate_fake_documents(size)
-#         insert_data(index_name, docs)
+doc_sizes = [50_000, 100_000, 150_000, 200_000, 250_000]
+docs_dict = {size: generate_fake_documents(size) for size in doc_sizes}
+    
+for num_shards in [1, 2, 3]:
+    index_name = f"new_documents_{num_shards}_shards"
+    create_index(index_name, num_shards)
+
+    for size in doc_sizes:
+        insert_data(index_name, docs_dict[size])

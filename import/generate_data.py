@@ -26,4 +26,5 @@ def generate_fake_documents(count):
             "versions": [{"created": fake.date(), "version": str(random.randint(1, 10))}]
         }
         docs.append(doc)
+    print(f"Generated {count} fake documents.")
     return docs
