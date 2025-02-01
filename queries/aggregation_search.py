@@ -32,4 +32,4 @@ def aggregate_title_length():
     }
     res = es.search(index="documents", body=body)
     for bucket in res["aggregations"]["title_length_histogram"]["buckets"]:
-        print(f"Length: {bucket['key']}, Number of documents: {bucket['doc_count']}")
+        print(f"Length: {bucket['key']} - {bucket['key'] + 50}, Number of documents: {bucket['doc_count']}")
