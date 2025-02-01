@@ -15,3 +15,21 @@ def aggregate_by_category():
     }
     res = es.search(index=index_name, body=body)
     return res["aggregations"]["categories_count"]["buckets"]
+
+def aggregate_title_length():
+    body = {
+        "size": 0,
+        "aggs": {
+            "title_length_histogram": {
+                "histogram": {
+                    "script": {
+                        "source": "return doc['title.keyword'].value.length();"
+                    },
+                    "interval": 50
+                }
+            }
+        }
+    }
+    res = es.search(index="documents", body=body)
+    for bucket in res["aggregations"]["title_length_histogram"]["buckets"]:
+        print(f"Length: {bucket['key']}, Number of documents: {bucket['doc_count']}")
