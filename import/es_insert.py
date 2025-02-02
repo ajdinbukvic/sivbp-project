@@ -39,12 +39,12 @@ def bulk_insert(actions):
 
     return success, failed
 
-doc_sizes = [50_000, 100_000, 150_000, 200_000, 250_000]
-docs_dict = {size: generate_fake_documents(size) for size in doc_sizes}
+# doc_sizes = [50_000, 100_000, 150_000, 200_000, 250_000]
+# docs_dict = {size: generate_fake_documents(size) for size in doc_sizes}
     
-for num_shards in [1, 2, 3]:
-    index_name = f"new_documents_{num_shards}_shards"
-    create_index(index_name, num_shards)
+# for num_shards in [1, 2, 3]:
+#     index_name = f"new_documents_{num_shards}_shards"
+#     create_index(index_name, num_shards)
 
-    for size in doc_sizes:
-        insert_data(index_name, docs_dict[size])
+#     for size in doc_sizes:
+#         insert_data(index_name, docs_dict[size])
