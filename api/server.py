@@ -45,22 +45,22 @@ queries = [
         "query": {
             "bool": {
                 "must": [
-                    {"match": {"content": "computer vision"}}
+                    {"match_phrase": {"content": "computer vision"}}
                 ],
                 "filter": [
-                    {"range": {"published_date": {"gte": "2023-01-01"}}}
+                    {"range": {"update_date": {"gte": "2023-01-01"}}}
                 ]
             }
         },
-        "sort": [{"published_date": "desc"}],
+        "sort": [{"update_date": "desc"}],
         "size": 10
     },
     {
         "query": {
             "bool": {
                 "must": [
-                    {"match": {"title": {"query": "autonomous systems", "fuzziness": "AUTO"}}},
-                    {"match": {"abstract": "reinforcement learning"}}
+                    {"match": {"title": {"query": "autonomous", "fuzziness": "AUTO"}}},
+                    {"match_phrase": {"abstract": "reinforcement learning"}}
                 ]
             }
         },

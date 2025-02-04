@@ -10,8 +10,8 @@ def search_case_sensitive_single_word(query):
         }
     }
     res = es.search(index=index_name, body=body)
-    for hit in res['hits']['hits']:
-        print(hit['_id'])
+    # for hit in res['hits']['hits']:
+    #     print(hit['_id'])
     total_hits = res['hits']['total']['value']
     print(f"Number of documents found: {total_hits}")
     
@@ -32,7 +32,7 @@ def search_case_sensitive_multiple_words(keywords):
         }
     }
     res = es.search(index=index_name, body=body)
-    for hit in res['hits']['hits']:
-        print(hit['_id'])
+    # for hit in res['hits']['hits']:
+    #     print(hit['_id'])
     total_hits = res['hits']['total']['value']
     print(f"Number of documents found: {total_hits}")    
