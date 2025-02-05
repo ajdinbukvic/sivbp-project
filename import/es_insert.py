@@ -24,7 +24,7 @@ def insert_data(index_name, docs, bulk_size=1000):
         total_success += success
         total_failed += failed
 
-    es.indices.refresh(index=index_name)
+    #es.indices.refresh(index=index_name)
     end_time = time.perf_counter() 
     print(f"Inserted {total_success} documents in {end_time - start_time:.2f} seconds. Failed: {total_failed}")
     

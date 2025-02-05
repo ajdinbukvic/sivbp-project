@@ -1,4 +1,7 @@
 from es_connection import es
+import requests
+
+ES_URL = "http://localhost:9200"
 
 index_names = ["new_documents_1_shards", "new_documents_2_shards", "new_documents_3_shards"]
 
@@ -43,8 +46,21 @@ for num_shards in [1, 2, 3]:
 
 def analyze_disk_usage():
     res = es.cat.indices(v=True, format="json")
-    print("Disk Usage for all indices:")
+    print("\nDisk Usage for all indices:")
     for index in res:
-        print(f"Index: {index['index']}, Docs: {index['docs.count']}, Store Size: {index['store.size']}")
+        print(f"Index: {index['index']}, Docs: {int(int(index['docs.count']) / 3)}, Store Size: {index['store.size']}")
 
 analyze_disk_usage()
+
+def get_es_stats():
+    response = requests.get(f"{ES_URL}/_nodes/stats")
+    if response.status_code == 200:
+        data = response.json()
+        for node_id, node_stats in data['nodes'].items():
+            print(f"\nNode ID: {node_id}")
+            print(f"CPU Usage: {node_stats['os']['cpu']['percent']}%")
+            print(f"Heap Memory Used: {node_stats['jvm']['mem']['heap_used_percent']}%")
+    else:
+        print("Error getting data from ES!")
+
+get_es_stats()

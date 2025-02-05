@@ -1,6 +1,8 @@
 from es_connection import es
 import time
 import subprocess
+import psutil
+from es_queries import queries
 
 def get_es_container():
     try:
@@ -23,102 +25,32 @@ def get_es_stats(container_id):
     )
     return result.stdout.strip()
 
-def search_with_monitoring(index_name, query, i):
-    
+
+def execute_query_with_monitoring(index_name, query, i):
+    cpu_usage = []
+    memory_usage = []
+
     start_time = time.time()
-    response = es.search(index=index_name, body=query)
+
+    while True:
+        cpu_usage.append(psutil.cpu_percent(interval=0.1))
+        memory_usage.append(psutil.virtual_memory().percent)
+
+        if len(cpu_usage) == 1:
+            response = es.search(index=index_name, body=query)
+            total_docs = response["hits"]["total"]["value"]
+            break
+
     end_time = time.time()
+    exec_time = end_time - start_time
     
-    total_docs = response["hits"]["total"]["value"]
-    
-    print(f"Search Query {i} for {index_name} took {end_time - start_time:.4f} seconds. Total results: {total_docs}")
-
-query_1 = {
-    "query": {
-        "bool": {
-            "must": [
-                {
-                    "multi_match": {
-                        "query": "Challenge tax word morning over important election",
-                        "fields": ["title", "abstract", "content"],
-                        "fuzziness": "AUTO",
-                        "operator": "and"
-                    }
-                }
-            ]
-        }
-    }
-}
-
-query_2 = {
-    "query": {
-        "range": {
-            "update_date": {
-                "gte": "2023-01-01",
-                "lte": "2023-06-30"
-            }
-        }
-    },
-    "sort": [
-        {"update_date": "asc"}
-    ]
-}
-
-query_3 = {
-    "size": 0,
-    "query": {
-        "bool": {
-            "filter": [
-                { "term": { "category.keyword": "cs.LG" } }
-            ]
-        }
-    },
-    "aggs": {
-        "avg_length": {
-            "avg": {
-                "field": "word_count"
-            }
-        }
-    }
-}
-
-query_4 = {
-    "query": {
-        "bool": {
-            "should": [
-                {"match_phrase": {"abstract": "computer science"}},
-                {"match": {"category": "cs.AI"}}
-            ]
-        }
-    },
-    "sort": [
-        {"update_date": "desc"}
-    ]
-}
-
-query_5 = {
-    "query": {
-        "bool": {
-            "must": [
-                {"match": {"abstract": "full"}},
-                {"match_phrase": {"content": "old task"}}
-            ],
-            "should": [
-                {"match": {"keywords": "AI"}},
-                {"match": {"keywords": "optimization"}}
-            ],
-            "must_not": [
-                {"match": {"category": "physics.optics"}}
-            ]
-        }
-    }
-}
-
-queries = [query_1, query_2, query_3, query_4, query_5]
+    print(f"\nSearch Query {i} for {index_name} took: {exec_time:.4f} seconds. Total results: {total_docs}")
+    print(f"CPU usage: {cpu_usage}%")
+    print(f"RAM usage: {memory_usage}MB")
 
 index_names = ["new_documents_1_shards", "new_documents_2_shards", "new_documents_3_shards"]
 
 for index_name in index_names:
     for i, query in enumerate(queries, 1):
-        search_with_monitoring(index_name, query, i)
+        execute_query_with_monitoring(index_name, query, i)
     print()
