@@ -36,6 +36,10 @@ for query in queries:
     y_values = [execution_times[query][k] if execution_times[query][k] is not None else np.nan for k in range(len(num_users))]
         
     plt.plot(num_users, y_values, style, color=color, label=f"{query} - {tag}")
+    
+    for i, y in enumerate(y_values):
+        if not np.isnan(y):
+            plt.text(num_users[i], y, f'{y:.4f}', ha='center', va='bottom', fontsize=9, color=color)
 
 plt.xscale("log")  
 plt.xlabel("Broj korisnika")

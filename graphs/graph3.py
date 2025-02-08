@@ -20,6 +20,19 @@ plt.plot(num_data, index_1_shard_2_node, label="Index - 1 Shard - 2 Nodes", mark
 plt.plot(num_data, index_2_shard_2_node, label="Index - 2 Shards - 2 Nodes", marker='s')
 plt.plot(num_data, index_3_shard_2_node, label="Index - 3 Shards - 3 Nodes", marker='s')
 
+for i, txt in enumerate(index_1_shard_1_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+for i, txt in enumerate(index_2_shard_1_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+for i, txt in enumerate(index_3_shard_1_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+for i, txt in enumerate(index_1_shard_2_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+for i, txt in enumerate(index_2_shard_2_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+for i, txt in enumerate(index_3_shard_2_node):
+    plt.text(num_data[i], txt, f'{txt:.4f}', ha='center', va='bottom', fontsize=9)
+
 plt.xticks(num_data)
 
 plt.xlabel("Broj podataka")

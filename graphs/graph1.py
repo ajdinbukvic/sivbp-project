@@ -9,8 +9,16 @@ x = np.arange(len(queries))
 width = 0.4 
 
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.bar(x - width/2, execution_times, width, label='Bez keširanja', color='blue')
-ax.bar(x + width/2, execution_times_cached, width, label='Keširano', color='orange')
+bars1 = ax.bar(x - width/2, execution_times, width, label='Bez keširanja', color='blue')
+bars2 = ax.bar(x + width/2, execution_times_cached, width, label='Keširano', color='orange')
+
+for bar in bars1:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.4f}', ha='center', va='bottom', fontsize=9, color='blue')
+
+for bar in bars2:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, yval, f'{yval:.4f}', ha='center', va='bottom', fontsize=9, color='orange')
 
 ax.set_xlabel('Upiti')
 ax.set_ylabel('Vrijeme izvršavanja (s)')

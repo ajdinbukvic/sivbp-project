@@ -10,7 +10,7 @@ def get_index_stats():
       stats = es.indices.stats(index=index_name)
       print(f"Stats for index {index_name}:")
       print(f"Number of documents: {int(stats['_all']['primaries']['docs']['count'] / 3)}")
-      print(f"Total size: {stats['_all']['primaries']['store']['size_in_bytes'] / 1e6} MB")
+      print(f"Total size: {int(stats['_all']['primaries']['store']['size_in_bytes'] / 1e6 / 1000)} GB")
 
 get_index_stats()
 
